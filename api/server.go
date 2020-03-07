@@ -20,7 +20,8 @@ func test(w http.ResponseWriter, r *http.Request) {
 }
 
 type JSONValues struct {
-	Msg    string
+	User   string
+	Uid    string
 	Status bool
 }
 
@@ -36,6 +37,7 @@ func getJwt(w http.ResponseWriter, r *http.Request) {
 
 	token.Claims = jwt.MapClaims{
 		"user": "admin",
+		"uid":  "1",
 		"exp":  time.Now().Add(time.Hour * 1).Unix(),
 	}
 
@@ -54,18 +56,16 @@ func verifyJwt(w http.ResponseWriter, r *http.Request) {
 	})
 	if err == nil {
 		claims := token.Claims.(jwt.MapClaims)
-		msg := fmt.Sprintf("hello, %s", claims["user"])
 		values := JSONValues{}
-		values.Msg = msg
+		values.User = claims["user"].(string)
+		values.Uid = claims["uid"].(string)
 		values.Status = true
 
 		JSONData, _ := json.Marshal(values)
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(JSONData)
 	} else {
-		msg := "incorrect JWT"
 		values := JSONValues{}
-		values.Msg = msg
 		values.Status = false
 
 		JSONData, _ := json.Marshal(values)
