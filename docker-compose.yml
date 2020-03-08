@@ -23,6 +23,6 @@ services:
         ports:
           - 3030:3030
         volumes:
-          - ./app:/api
+          - ./api:/api
         depends_on:
           - jwt_mysql
