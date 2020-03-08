@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"./pkg/auth"
+	"./pkg/posts"
 )
 
 func main() {
@@ -16,6 +17,7 @@ func main() {
 
 	//http.HandleFunc("/getjwt", jwtmanage.GetJwt)
 	http.HandleFunc("/secret", auth.Secret)
+	http.HandleFunc("/posts", posts.PostLists)
 	http.HandleFunc("/signin", auth.SignIn)
 	err := http.ListenAndServe(":"+*portNum, nil)
 	if err != nil {

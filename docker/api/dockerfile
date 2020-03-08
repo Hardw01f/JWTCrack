@@ -6,4 +6,7 @@ WORKDIR /app
 
 RUN git init && \
     go get github.com/dgrijalva/jwt-go && \
-    go get github.com/nirasan/go-jwt-handler
+    go get github.com/nirasan/go-jwt-handler && \
+    go get github.com/go-sql-driver/mysql && \
+    go get github.com/jinzhu/gorm && \
+    go get golang.org/x/xerrors
