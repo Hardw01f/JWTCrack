@@ -51,10 +51,15 @@ func GetJwt(userName, uid string) (string, error) {
 
 func VerifyJWT(r *http.Request) (JSONValues, error) {
 	tokenHeader := r.Header.Get("Authorization")
+	if tokenHeader == "" {
+		errStruct := VerifyUser{}
+		err := xerrors.New("Not get Authorization Header")
+		return errStruct.JSONValues, err
+	}
 	fmt.Println(tokenHeader)
 
 	slicedToken := strings.Split(tokenHeader, " ")
-	tokenString := slicedToken[1]
+	tokenString := slicedToken[len(slicedToken)-1]
 
 	verifyUser := VerifyUser{}
 
