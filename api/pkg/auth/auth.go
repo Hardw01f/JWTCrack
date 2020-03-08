@@ -43,6 +43,48 @@ func GormInit() (*gorm.DB, error) {
 	return db, nil
 }
 
+func SignUp(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "POST" {
+		r.ParseForm()
+		userName := r.FormValue("name")
+		email := r.FormValue("email")
+		password := r.FormValue("password")
+
+		db, err := GormInit()
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		user := Users{}
+		user.Name = userName
+		user.Email = email
+		user.Password = password
+
+		if err := db.Create(&user).Error; err != nil {
+			fmt.Println(err)
+		}
+
+		if err := db.Where("name=? AND password=?", user.Name, user.Password).Find(&user).Error; err != nil {
+			fmt.Println(err)
+		}
+
+		signinStatus := Status{}
+
+		signinStatus.Uid = strconv.Itoa(user.Id)
+		signinStatus.Status = "true"
+		signinStatus.Token, err = jwtmanage.GetJwt(user.Name, signinStatus.Uid)
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println(signinStatus)
+		bytes, _ := json.Marshal(signinStatus)
+		w.Header().Set("Content-Type", "application/json")
+		fmt.Fprint(w, string(bytes))
+		return
+
+	}
+}
+
 func SignIn(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	if r.Method == "POST" {
@@ -98,7 +140,8 @@ func Secret(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		tokenValues, err := jwtmanage.VerifyJWT(r)
 		if err != nil {
-			http.NotFound(w, nil)
+			//http.NotFound(w, nil)
+			http.Redirect(w, r, "http://localhost:3030/signin", 301)
 			return
 		}
 
@@ -131,7 +174,8 @@ func Secret(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprint(w, string(bytes))
 			return
 		} else {
-			http.NotFound(w, nil)
+			//http.NotFound(w, nil)
+			http.Redirect(w, r, "http://localhost:3030/signin", 301)
 			return
 		}
 
