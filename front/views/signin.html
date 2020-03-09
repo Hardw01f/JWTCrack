@@ -1,0 +1,28 @@
+{{define "signin"}}
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
+</head>
+<body>
+<h1>My First Heading</h1>
+<h1>Goodmorning, {{.}}</h1>
+<form name="signinForm">
+    <input name="email" type="text">
+    <input name="password" type="password">
+    <button id="submitBtn" onclick="submitForm()">Submit</button>
+</form>
+{{end}}
+
+<script>
+    function submitForm(){
+        var email = document.signindForm.email.value
+        console.log(email)
+        var password = document.signinForm.password.value
+        console.log(password)
+
+        console.log("hogehoge")
+    
+</script>
+</body>
+</html>
+

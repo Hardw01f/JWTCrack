@@ -1,0 +1,8 @@
+FROM golang:1.13.8-alpine3.11
+
+RUN apk update && apk add --no-cache git
+
+WORKDIR /front
+
+RUN go get -u github.com/labstack/echo/... && \
+    go get github.com/labstack/echo/middleware

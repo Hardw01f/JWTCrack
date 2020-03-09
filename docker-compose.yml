@@ -26,3 +26,14 @@ services:
           - ./api:/api
         depends_on:
           - jwt_mysql
+
+    jwt_front:
+        build:
+            context: ./docker/front
+            dockerfile: dockerfile
+        container_name: jwt_front
+        tty: true
+        ports:
+          - 7070:7070
+        volumes:
+          - ./front:/front
